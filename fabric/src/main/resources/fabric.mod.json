@@ -17,9 +17,6 @@
   "entrypoints": {
     "main": [
       "dev.tocraft.skinshifter.SkinShifter::initialize"
-    ],
-    "client": [
-      "dev.tocraft.skinshifter.SkinShifterClient::initialize"
     ]
   },
   "mixins": [

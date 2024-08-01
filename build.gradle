@@ -10,10 +10,6 @@ buildscript {
     }
 }
 
-import com.diluv.schoomp.Webhook
-import com.diluv.schoomp.message.Message
-import com.diluv.schoomp.message.embed.Embed
-
 architectury {
     minecraft = project.name
 }
@@ -73,6 +69,10 @@ subprojects {
 
     loom {
         silentMojangMappingsLicense()
+    }
+
+    repositories {
+        mavenLocal()
     }
 
     dependencies {
