@@ -7,6 +7,31 @@
 
 *SkinShifter* lets you change your Player Skin in game!
 
+## Getting Started
+
+This mod is intended to be used in modpacks or as library for other mods.
+You can change your skin by using the command `/skinshifter set @s xyz`, where `xyz` is the name or uuid of the player you want to morph into.
+
+If you're a coder, you can use the following methods:
+~~~java
+SkinShifter.setSkin(serverPlayer, playerUuidForSkin); // Sets the current skin
+SkinShifter.getCurrentSkin(serverPlayer); // returns the UUID of owner of the current skin. Might be the own UUID!
+~~~
+
+To change config values, you can do the following:
+~~~java
+class Test {
+    public static void initialize() {
+        SkinShifter.CONFIG.changeCape = true;
+        SkinShifter.CONFIGchangeNameTag = true;
+        // required to save the changes into the config file
+        SkinShifter.CONFIG.save();
+        // when changing the config after the first player has joined, use:
+        // SkinShifter.CONFIG.sendToAllPlayers(serverLevel);
+    }
+}
+~~~
+
 ### License
 
-Woodwalkers is licensed under MIT. 
+SkinShifter is licensed under Apache 2.0. 

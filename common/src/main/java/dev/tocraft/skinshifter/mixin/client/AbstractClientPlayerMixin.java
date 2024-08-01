@@ -1,4 +1,4 @@
-package dev.tocraft.skinshifter.mixin;
+package dev.tocraft.skinshifter.mixin.client;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import dev.tocraft.skinshifter.SkinShifter;
@@ -9,7 +9,9 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+//#if MC>1182
 import net.minecraft.client.resources.PlayerSkin;
+//#endif
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,6 +36,7 @@ public class AbstractClientPlayerMixin {
     @Unique
     private static final Map<String, ResourceLocation> skinShifter$capeCache = new ConcurrentHashMap<>();
 
+    //#if MC>1182
     @Inject(method = "getSkin", at = @At("RETURN"), cancellable = true)
     public void setToNewSkin(CallbackInfoReturnable<PlayerSkin> cir) {
         ShiftPlayerSkin skin = SkinPlayerData.getSkin((Player) (Object) this);
@@ -45,6 +48,31 @@ public class AbstractClientPlayerMixin {
             cir.setReturnValue(playerSkin);
         }
     }
+    //#else
+    //$$ @Inject(method = "getSkinTextureLocation", at = @At("RETURN"), cancellable = true)
+    //$$ public void setToNewSkin(CallbackInfoReturnable<ResourceLocation> cir) {
+    //$$     ShiftPlayerSkin skin = SkinPlayerData.getSkin((Player) (Object) this);
+    //$$     if (skin != null && skin.skin() != null) {
+    //$$         cir.setReturnValue(skinShifter$getCustomSkinId(skin.skin()));
+    //$$     }
+    //$$ }
+    //$$ @Inject(method = "getModelName", at = @At("RETURN"), cancellable = true)
+    //$$ public void setModelType(CallbackInfoReturnable<String> cir) {
+    //$$     ShiftPlayerSkin skin = SkinPlayerData.getSkin((Player) (Object) this);
+    //$$     if (null != skin && skin.skin() != null) {
+    //$$         cir.setReturnValue(skin.isSlim() ? "slim" : "default");
+    //$$     }
+    //$$ }
+    //$$ @Inject(method = "getCloakTextureLocation", at = @At("RETURN"), cancellable = true)
+    //$$ public void setToNewCloak(CallbackInfoReturnable<ResourceLocation> cir) {
+    //$$     if (SkinShifter.CONFIG.changeCape) {
+    //$$         ShiftPlayerSkin skin = SkinPlayerData.getSkin((Player) (Object) this);
+    //$$         if (skin != null && skin.cape() != null) {
+    //$$             cir.setReturnValue(skinShifter$getCustomCapeId(skin.cape()));
+    //$$         }
+    //$$     }
+    //$$ }
+    //#endif
 
     @Unique
     private ResourceLocation skinShifter$getCustomSkinId(URL skinUrl) {
