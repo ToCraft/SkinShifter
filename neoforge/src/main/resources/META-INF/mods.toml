@@ -1,0 +1,34 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+issueTrackerURL = "https://github.com/ToCraft/SkinShifter/issues"
+displayURL = "https://github.com/ToCraft/SkinShifter"
+license = "Apache-2.0"
+
+[[mixins]]
+config = "skinshifter.mixins.json"
+
+[[mods]]
+modId = "skinshifter"
+version = "${version}"
+displayName = "SkinShifter"
+authors = "To_Craft"
+description = '''
+Change your Skin!
+'''
+logoFile = "icon.png"
+
+[[dependencies.skinshifter]]
+modId = "minecraft"
+mandatory = true
+type = "required"
+versionRange = "[${minecraft_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.skinshifter]]
+modId = "craftedcore"
+mandatory = true
+type = "required"
+versionRange = "[${craftedcore_version},)"
+ordering = "AFTER"
+side = "BOTH"

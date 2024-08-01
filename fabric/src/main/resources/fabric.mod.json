@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "skinshifter",
+  "version": "${version}",
+  "name": "SkinShifter",
+  "icon": "icon.png",
+  "description": "Change your Skin!",
+  "authors": [
+    "To_Craft"
+  ],
+  "contact": {
+    "issues": "https://github.com/ToCraft/SkinShifter/issues",
+    "sources": "https://github.com/ToCraft/SkinShifter"
+  },
+  "license": "Apache-2.0",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.tocraft.skinshifter.SkinShifter::initialize"
+    ],
+    "client": [
+      "dev.tocraft.skinshifter.SkinShifterClient::initialize"
+    ]
+  },
+  "mixins": [
+    "skinshifter.mixins.json"
+  ],
+  "depends": {
+    "minecraft": ">=${minecraft_version}",
+    "fabricloader": ">=0.8.7+build.201",
+    "fabric": "*",
+    "fabric-api": "*",
+    "craftedcore": ">=${craftedcore_version}"
+  }
+}
