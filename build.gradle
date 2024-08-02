@@ -5,8 +5,8 @@ buildscript {
         maven { url "https://maven.tocraft.dev/public" }
     }
     dependencies {
-        classpath group: 'com.diluv.schoomp', name: 'Schoomp', version: '1.2.6+'
-        classpath "dev.tocraft:preprocessor:0.91-SNAPSHOT"
+        classpath group: 'com.diluv.schoomp', name: 'Schoomp', version: '1.2.6'
+        classpath "dev.tocraft:preprocessor:0.96-SNAPSHOT"
     }
 }
 
@@ -48,31 +48,27 @@ project.ext.set("supported_versions", supportedVersions)
 println("└── Supported Minecraft Versions: ${project.supported_versions}")
 println()
 
-layout.buildDirectory.set(rootDir.toPath().resolve("build/$project.name").toFile())
-
 apply plugin: "dev.tocraft.preprocessor"
 
+layout.buildDirectory.set(rootDir.toPath().resolve("build/$project.name").toFile())
+
 subprojects {
-    layout.buildDirectory.set(parent.layout.buildDirectory.file(project.name).get().asFile)
-
-    repositories {
-        mavenLocal()
-    }
-
     apply plugin: "dev.architectury.loom"
     apply plugin: "maven-publish"
     apply plugin: "dev.tocraft.preprocessor"
+
+    layout.buildDirectory.set(parent.layout.buildDirectory.file(project.name).get().asFile)
 
     preprocess {
         vars.put("MC", project.props.mc_id != null ? project.props.mc_id : project.name.replaceAll(".", ""))
     }
 
-    loom {
-        silentMojangMappingsLicense()
-    }
-
     repositories {
         mavenLocal()
+    }
+
+    loom {
+        silentMojangMappingsLicense()
     }
 
     dependencies {
