@@ -12,6 +12,7 @@ import tocraft.craftedcore.patched.TComponent;
 import tocraft.craftedcore.platform.VersionChecker;
 import tocraft.craftedcore.registration.PlayerDataRegistry;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import static dev.tocraft.skinshifter.data.SkinPlayerData.TAG_NAME;
@@ -30,7 +31,11 @@ public class SkinShifter {
     }
 
     public static void setSkin(ServerPlayer player, UUID skinPlayer) {
-        SkinPlayerData.setSkin(player, skinPlayer);
+        if (Objects.equals(player.getUUID(), skinPlayer)) {
+            SkinPlayerData.setSkin(player, null);
+        } else {
+            SkinPlayerData.setSkin(player, skinPlayer);
+        }
     }
 
     public static UUID getCurrentSkin(Player player) {

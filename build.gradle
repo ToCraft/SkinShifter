@@ -65,10 +65,6 @@ subprojects {
         vars.put("MC", project.props.mc_id != null ? project.props.mc_id : project.name.replaceAll(".", ""))
     }
 
-    repositories {
-        mavenLocal()
-    }
-
     loom {
         silentMojangMappingsLicense()
     }

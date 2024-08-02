@@ -1,4 +1,5 @@
 {
   "skinshifter.command.set": "Setzte den Skin von %s auf den von %s.",
-  "skinshifter.command.reset": "Setzte den Skin von %s zurück."
+  "skinshifter.command.reset": "Setzte den Skin von %s zurück.",
+  "skinshifter.invalid_player": "Ungültiger Spieler-Name: %s"
 }

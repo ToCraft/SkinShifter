@@ -41,7 +41,7 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                                 .executes(context -> {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                     UUID playerUUID = UuidArgument.getUuid(context, "playerUUID");
-                                    SkinPlayerData.setSkin(player, playerUUID);
+                                    SkinShifter.setSkin(player, playerUUID);
                                     CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.set", player.getDisplayName(), PlayerProfile.ofId(playerUUID).name()), true);
                                     return 1;
                                 }))
@@ -49,7 +49,12 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                                 .executes(context -> {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                     String playerName = MessageArgument.getMessage(context, "playerName").getString();
-                                    SkinPlayerData.setSkin(player, Objects.requireNonNull(PlayerProfile.ofName(playerName)).id());
+                                    PlayerProfile playerProfile = PlayerProfile.ofName(playerName);
+                                    if (playerProfile == null) {
+                                        CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.invalid_player", playerName), true);
+                                        return 0;
+                                    }
+                                    SkinShifter.setSkin(player, playerProfile.id());
                                     CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.set", player.getDisplayName(), playerName), true);
                                     return 1;
                                 }))).build();
@@ -58,7 +63,7 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                 .then(Commands.argument("player", EntityArgument.player())
                         .executes(context -> {
                             ServerPlayer player = EntityArgument.getPlayer(context, "player");
-                            SkinPlayerData.setSkin(player, null);
+                            SkinShifter.setSkin(player, null);
                             CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.reset", player.getDisplayName()), true);
                             return 1;
                         })).build();
