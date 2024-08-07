@@ -17,35 +17,35 @@ body:
     id: mc-version
     attributes:
       label: Minecraft version
-      placeholder: e.g. 1.20.2
+      placeholder: e.g. 1.20.6
     validations:
       required: true
   - type: input
-    id: walkers-version
+    id: skinshifter-version
     attributes:
-      label: Woodwalkers version
-      placeholder: e.g. 2.1
+      label: SkinShiftter version
+      placeholder: e.g. 1.0
     validations:
       required: true
   - type: input
     id: craftedcore-version
     attributes:
       label: CraftedCore version
-      placeholder: e.g. 2.1
+      placeholder: e.g. 5.1
     validations:
       required: true
   - type: input
     id: modloader-version
     attributes:
       label: Modloader version
-      placeholder: "e.g. 48.2.0"
+      placeholder: e.g. 48.2.0
     validations:
       required: true
   - type: textarea
     attributes:
-      label: "The latest.log file"
-      description: "Drag-and-Drop your latest.log file or append a link to a Gist-file."
-      placeholder: "Your latest.log file"
+      label: The latest.log file
+      description: Drag-and-Drop your latest.log file or append a link to a Gist-file.
+      placeholder: Your latest.log file
     validations:
       required: true
   - type: textarea
