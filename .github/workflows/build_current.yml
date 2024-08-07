@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '**.gradle'
+      - '**.gradle.kts'
       - '**.properties'
       - '**/src/**'
     branches-ignore:
