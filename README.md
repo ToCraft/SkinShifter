@@ -6,7 +6,7 @@
 # SkinShifter
 
 *SkinShifter* lets you change your Player Skin in game!
-(Don't worry- you won't change you're actual skin, it just renders differently.)
+(Don't worry- you won't change your actual skin, it just renders differently.)
 
 ## Getting Started
 
