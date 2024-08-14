@@ -11,6 +11,7 @@ import tocraft.craftedcore.registration.PlayerDataRegistry;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ApiStatus.Internal
@@ -27,12 +28,12 @@ public class SkinPlayerData {
         UUID uuid = SkinShifter.getCurrentSkin(player);
         if (uuid != player.getUUID()) {
                 if (!CACHED_SKINS.containsKey(uuid)) {
-                    // do this in an external thread so the game isn't stuck with bad internet connection
-                    new Thread(() -> {
+                    // do this in an external thread so the game isn't stuck with bad internet connection (might take some time for skin to load, though)
+                    CompletableFuture.runAsync(() -> {
                         PlayerProfile playerProfile = PlayerProfile.ofId(uuid);
                         ShiftPlayerSkin skin = ShiftPlayerSkin.byPlayerProfile(playerProfile);
                         CACHED_SKINS.put(uuid, skin);
-                    }).start();
+                    });
                 }
 
                 return CACHED_SKINS.get(uuid);

@@ -19,6 +19,7 @@ import tocraft.craftedcore.platform.PlayerProfile;
 
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class SkinShifterCommand implements CommandEvents.CommandRegistration {
     //#if MC>1182
@@ -42,20 +43,24 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                     UUID playerUUID = UuidArgument.getUuid(context, "playerUUID");
                                     SkinShifter.setSkin(player, playerUUID);
-                                    CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.set", player.getDisplayName(), PlayerProfile.ofId(playerUUID).name()), true);
+                                    // run async in case of bad internet connection
+                                    CompletableFuture.runAsync(() -> CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.set", player.getDisplayName(), PlayerProfile.ofId(playerUUID).name()), true));
                                     return 1;
                                 }))
                         .then(Commands.argument("playerName", MessageArgument.message())
                                 .executes(context -> {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
                                     String playerName = MessageArgument.getMessage(context, "playerName").getString();
-                                    PlayerProfile playerProfile = PlayerProfile.ofName(playerName);
-                                    if (playerProfile == null) {
-                                        CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.invalid_player", playerName), true);
-                                        return 0;
-                                    }
-                                    SkinShifter.setSkin(player, playerProfile.id());
-                                    CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.set", player.getDisplayName(), playerName), true);
+                                    // run async in case of bad internet connection
+                                    CompletableFuture.runAsync(() -> {
+                                        PlayerProfile playerProfile = PlayerProfile.ofName(playerName);
+                                        if (playerProfile == null) {
+                                            CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.invalid_player", playerName), true);
+                                        } else {
+                                            SkinShifter.setSkin(player, playerProfile.id());
+                                            CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.set", player.getDisplayName(), playerName), true);
+                                        }
+                                    });
                                     return 1;
                                 }))).build();
 

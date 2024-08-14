@@ -1,3 +1,8 @@
+SkinShifter 1..1
+================
+
+- run different task asynchronous to fix stuck when running commands with bad internet connection
+
 SkinShifter 1.0
 ================
 
