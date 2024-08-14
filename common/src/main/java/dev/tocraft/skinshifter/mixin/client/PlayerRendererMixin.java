@@ -2,7 +2,6 @@ package dev.tocraft.skinshifter.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.tocraft.skinshifter.SkinShifter;
-import dev.tocraft.skinshifter.data.ShiftPlayerSkin;
 import dev.tocraft.skinshifter.data.SkinPlayerData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -12,6 +11,8 @@ import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import tocraft.craftedcore.patched.TComponent;
+import tocraft.craftedcore.platform.PlayerProfile;
 
 @Environment(EnvType.CLIENT)
 @Mixin(PlayerRenderer.class)
@@ -23,9 +24,9 @@ public class PlayerRendererMixin {
     //#endif
     private Component modifyNameTag(Component component, @Local(ordinal = 0, argsOnly = true) AbstractClientPlayer abstractClientPlayer) {
         if (SkinShifter.CONFIG.changeNameTag) {
-            ShiftPlayerSkin skin = SkinPlayerData.getSkin(abstractClientPlayer);
-            if (skin != null && skin.displayName() != null) {
-                return skin.displayName();
+            PlayerProfile skin = SkinPlayerData.getSkin(abstractClientPlayer);
+            if (skin != null) {
+                return TComponent.literal(skin.name());
             }
         }
         return component;

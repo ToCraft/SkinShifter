@@ -9,6 +9,8 @@ public class SkinShifterConfig implements Config {
     public boolean changeCape = true;
     @Synchronize
     public boolean changeNameTag = true;
+    @Synchronize
+    public boolean changeChatName = true;
 
     @Override
     public String getName() {

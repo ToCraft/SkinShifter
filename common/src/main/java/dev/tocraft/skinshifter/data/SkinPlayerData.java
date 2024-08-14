@@ -17,21 +17,21 @@ import java.util.concurrent.ConcurrentHashMap;
 @ApiStatus.Internal
 public class SkinPlayerData {
     public static final String TAG_NAME = "CurrentSkin";
-    private static final Map<UUID, ShiftPlayerSkin> CACHED_SKINS = new ConcurrentHashMap<>();
+    private static final Map<UUID, PlayerProfile> CACHED_SKINS = new ConcurrentHashMap<>();
 
     public static void initialize() {
         PlayerDataRegistry.registerKey(TAG_NAME, true, true);
     }
 
     @Nullable
-    public static ShiftPlayerSkin getSkin(Player player) {
+    public static PlayerProfile getSkin(Player player) {
         UUID uuid = SkinShifter.getCurrentSkin(player);
         if (uuid != player.getUUID()) {
+            // TODO: Replace with CraftedCore's Caching methods to save RAM
                 if (!CACHED_SKINS.containsKey(uuid)) {
                     // do this in an external thread so the game isn't stuck with bad internet connection (might take some time for skin to load, though)
                     CompletableFuture.runAsync(() -> {
-                        PlayerProfile playerProfile = PlayerProfile.ofId(uuid);
-                        ShiftPlayerSkin skin = ShiftPlayerSkin.byPlayerProfile(playerProfile);
+                        PlayerProfile skin = PlayerProfile.ofId(uuid);
                         CACHED_SKINS.put(uuid, skin);
                     });
                 }

@@ -1,5 +1,7 @@
 {
   "skinshifter.command.set": "Setzte den Skin von %s auf den von %s.",
   "skinshifter.command.reset": "Setzte den Skin von %s zurück.",
-  "skinshifter.invalid_player": "Ungültiger Spieler-Name: %s"
+  "skinshifter.invalid_player": "Ungültiger Spieler-Name: %s",
+  "skinshifter.config.set": "Config entry %s is now %s",
+  "skinshifter.config.get": "Config entry %s is set to %s"
 }

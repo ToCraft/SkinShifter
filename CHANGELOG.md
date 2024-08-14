@@ -1,7 +1,9 @@
 SkinShifter 1..1
 ================
 
-- run different task asynchronous to fix stuck when running commands with bad internet connection
+- run different tasks asynchronous to fix stuck when running commands with bad internet connection
+- change player chat name
+- performance improvements
 
 SkinShifter 1.0
 ================

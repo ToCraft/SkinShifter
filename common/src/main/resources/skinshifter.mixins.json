@@ -4,6 +4,7 @@
   "package": "dev.tocraft.skinshifter.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "PlayerMixin"
   ],
   "client": [
     "client.AbstractClientPlayerMixin",
