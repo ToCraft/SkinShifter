@@ -9,15 +9,12 @@ import org.jetbrains.annotations.Nullable;
 import tocraft.craftedcore.platform.PlayerProfile;
 import tocraft.craftedcore.registration.PlayerDataRegistry;
 
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 
 @ApiStatus.Internal
 public class SkinPlayerData {
     public static final String TAG_NAME = "CurrentSkin";
-    private static final Map<UUID, PlayerProfile> CACHED_SKINS = new ConcurrentHashMap<>();
 
     public static void initialize() {
         PlayerDataRegistry.registerKey(TAG_NAME, true, true);
@@ -27,17 +24,13 @@ public class SkinPlayerData {
     public static PlayerProfile getSkin(Player player) {
         UUID uuid = SkinShifter.getCurrentSkin(player);
         if (uuid != player.getUUID()) {
-            // TODO: Replace with CraftedCore's Caching methods to save RAM
-                if (!CACHED_SKINS.containsKey(uuid)) {
-                    // do this in an external thread so the game isn't stuck with bad internet connection (might take some time for skin to load, though)
-                    CompletableFuture.runAsync(() -> {
-                        PlayerProfile skin = PlayerProfile.ofId(uuid);
-                        CACHED_SKINS.put(uuid, skin);
-                    });
-                }
-
-                return CACHED_SKINS.get(uuid);
+            PlayerProfile playerProfile = PlayerProfile.getCachedProfile(uuid);
+            if (playerProfile == null) {
+                // cache profile asynchronous
+                CompletableFuture.runAsync(() -> PlayerProfile.ofId(uuid));
             }
+            return playerProfile;
+        }
 
         return null;
     }

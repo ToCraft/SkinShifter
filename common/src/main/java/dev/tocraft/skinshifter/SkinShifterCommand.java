@@ -75,7 +75,7 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
         LiteralCommandNode<CommandSourceStack> changeChatName = Commands.literal("changeChatName")
                 .executes(context -> {
                     boolean bool = SkinShifter.CONFIG.changeChatName;
-                    CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.config.get", "changeChatName", String.valueOf(bool)), true);
+                    CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("craftedcore.config.get", "changeChatName", String.valueOf(bool)), true);
                     return 1;
                 })
                 .then(Commands.argument("value", BoolArgumentType.bool())
@@ -84,7 +84,7 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                             SkinShifter.CONFIG.changeChatName = bool;
                             SkinShifter.CONFIG.save();
                             SkinShifter.CONFIG.sendToAllPlayers(context.getSource().getLevel());
-                            CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.config.set", "changeChatName", String.valueOf(bool)), true);
+                            CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("craftedcore.config.set", "changeChatName", String.valueOf(bool)), true);
                             return 1;
                 })).build();
 

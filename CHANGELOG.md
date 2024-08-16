@@ -1,9 +1,10 @@
-SkinShifter 1..1
+SkinShifter 1.1
 ================
 
 - run different tasks asynchronous to fix stuck when running commands with bad internet connection
 - change player chat name
 - performance improvements
+- merge caching to CraftedCore
 
 SkinShifter 1.0
 ================

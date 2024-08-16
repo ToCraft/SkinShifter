@@ -1,7 +1,6 @@
 package dev.tocraft.skinshifter.mixin.client;
 
 import dev.tocraft.skinshifter.SkinShifter;
-import dev.tocraft.skinshifter.data.SkinCache;
 import dev.tocraft.skinshifter.data.SkinPlayerData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -25,8 +24,8 @@ public class AbstractClientPlayerMixin {
     public void setToNewSkin(CallbackInfoReturnable<PlayerSkin> cir) {
         PlayerProfile skin = SkinPlayerData.getSkin((Player) (Object) this);
         if (skin != null && skin.skin() != null) {
-            ResourceLocation skinId = SkinCache.getCustomSkinId(skin.skin());
-            ResourceLocation capeId = SkinShifter.CONFIG.changeCape ? SkinCache.getCustomCapeId(skin.cape()) : null;
+            ResourceLocation skinId = skin.getSkinId();
+            ResourceLocation capeId = SkinShifter.CONFIG.changeCape ? skin.getCapeId() : null;
             PlayerSkin.Model model = skin.isSlim() ? PlayerSkin.Model.SLIM : PlayerSkin.Model.WIDE;
             PlayerSkin playerSkin = new PlayerSkin(skinId, skin.skin().toString(), capeId, null, model, true);
             cir.setReturnValue(playerSkin);
@@ -37,7 +36,7 @@ public class AbstractClientPlayerMixin {
     //$$ public void setToNewSkin(CallbackInfoReturnable<ResourceLocation> cir) {
     //$$     PlayerProfile skin = SkinPlayerData.getSkin((Player) (Object) this);
     //$$     if (skin != null && skin.skin() != null) {
-    //$$         cir.setReturnValue(SkinCache.getCustomSkinId(skin.skin()));
+    //$$         cir.setReturnValue(skin.getSkinId());
     //$$     }
     //$$ }
     //$$ @Inject(method = "getModelName", at = @At("RETURN"), cancellable = true)
@@ -52,7 +51,7 @@ public class AbstractClientPlayerMixin {
     //$$     if (SkinShifter.CONFIG.changeCape) {
     //$$         PlayerProfile skin = SkinPlayerData.getSkin((Player) (Object) this);
     //$$         if (skin != null && skin.cape() != null) {
-    //$$             cir.setReturnValue(SkinCache.getCustomCapeId(skin.cape()));
+    //$$             cir.setReturnValue(skin.getCapeId());
     //$$         }
     //$$     }
     //$$ }
