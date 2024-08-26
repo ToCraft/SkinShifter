@@ -2,6 +2,8 @@ package dev.tocraft.skinshifter;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 //#if MC>1182
 import net.minecraft.commands.CommandBuildContext;
@@ -34,12 +36,26 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
     //#endif
 
     private void onRegister(CommandDispatcher<CommandSourceStack> dispatcher) {
-        LiteralCommandNode<CommandSourceStack> rootNode = Commands.literal(SkinShifter.MODID).requires(source -> source.hasPermission(2)).build();
+        LiteralCommandNode<CommandSourceStack> rootNode = Commands.literal(SkinShifter.MODID).requires(source -> source.hasPermission(SkinShifter.CONFIG.baseCommandOPLevel) || source.hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)).build();
         LiteralCommandNode<CommandSourceStack> set = Commands.literal("set")
                 .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.argument("playerUUID", UuidArgument.uuid())
                                 .executes(context -> {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
+                                    ServerPlayer sender;
+                                    try {
+                                        sender = context.getSource().getPlayerOrException();
+
+                                    } catch (CommandSyntaxException e) {
+                                        sender = null;
+                                    }
+                                    if (sender != null && sender.getUUID() == player.getUUID()) {
+                                        if (!context.getSource().hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)) {
+                                            throw new SimpleCommandExceptionType(TComponent.translatable("craftedcore.command.invalid_perms")).create();
+                                        }
+                                    } else if (!context.getSource().hasPermission(SkinShifter.CONFIG.baseCommandOPLevel)) {
+                                        throw new SimpleCommandExceptionType(TComponent.translatable("craftedcore.command.invalid_perms")).create();
+                                    }
                                     UUID playerUUID = UuidArgument.getUuid(context, "playerUUID");
                                     SkinShifter.setSkin(player, playerUUID);
                                     // run async in case of bad internet connection
@@ -49,6 +65,20 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                         .then(Commands.argument("playerName", MessageArgument.message())
                                 .executes(context -> {
                                     ServerPlayer player = EntityArgument.getPlayer(context, "player");
+                                    ServerPlayer sender;
+                                    try {
+                                        sender = context.getSource().getPlayerOrException();
+
+                                    } catch (CommandSyntaxException e) {
+                                        sender = null;
+                                    }
+                                    if (sender != null && sender.getUUID() == player.getUUID()) {
+                                        if (!context.getSource().hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)) {
+                                            throw new SimpleCommandExceptionType(TComponent.translatable("craftedcore.command.invalid_perms")).create();
+                                        }
+                                    } else if (!context.getSource().hasPermission(SkinShifter.CONFIG.baseCommandOPLevel)) {
+                                        throw new SimpleCommandExceptionType(TComponent.translatable("craftedcore.command.invalid_perms")).create();
+                                    }
                                     String playerName = MessageArgument.getMessage(context, "playerName").getString();
                                     // run async in case of bad internet connection
                                     CompletableFuture.runAsync(() -> {
@@ -67,12 +97,26 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                 .then(Commands.argument("player", EntityArgument.player())
                         .executes(context -> {
                             ServerPlayer player = EntityArgument.getPlayer(context, "player");
+                            ServerPlayer sender;
+                            try {
+                                sender = context.getSource().getPlayerOrException();
+
+                            } catch (CommandSyntaxException e) {
+                                sender = null;
+                            }
+                            if (sender != null && sender.getUUID() == player.getUUID()) {
+                                if (!context.getSource().hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)) {
+                                    throw new SimpleCommandExceptionType(TComponent.translatable("craftedcore.command.invalid_perms")).create();
+                                }
+                            } else if (!context.getSource().hasPermission(SkinShifter.CONFIG.baseCommandOPLevel)) {
+                                throw new SimpleCommandExceptionType(TComponent.translatable("craftedcore.command.invalid_perms")).create();
+                            }
                             SkinShifter.setSkin(player, null);
                             CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.reset", player.getDisplayName()), true);
                             return 1;
                         })).build();
 
-        LiteralCommandNode<CommandSourceStack> changeChatName = Commands.literal("changeChatName")
+        LiteralCommandNode<CommandSourceStack> changeChatName = Commands.literal("changeChatName").requires(source -> source.hasPermission(SkinShifter.CONFIG.baseCommandOPLevel))
                 .executes(context -> {
                     boolean bool = SkinShifter.CONFIG.changeChatName;
                     CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("craftedcore.config.get", "changeChatName", String.valueOf(bool)), true);

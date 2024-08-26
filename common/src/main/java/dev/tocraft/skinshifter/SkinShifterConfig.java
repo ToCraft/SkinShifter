@@ -11,6 +11,8 @@ public class SkinShifterConfig implements Config {
     public boolean changeNameTag = true;
     @Synchronize
     public boolean changeChatName = true;
+    public int baseCommandOPLevel = 2;
+    public int selfCommandOPLevel = 0;
 
     @Override
     public String getName() {

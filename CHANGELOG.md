@@ -1,3 +1,9 @@
+SkinShifter 1.2
+================
+
+- Config option to configure OP Level for commands
+- different command level to modify own skin
+
 SkinShifter 1.1
 ================
 
