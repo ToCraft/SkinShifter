@@ -19,7 +19,7 @@ public abstract class PlayerMixin {
 
     @Inject(method = "getDisplayName", at = @At("RETURN"), cancellable = true)
     private void onGetName(CallbackInfoReturnable<Component> cir) {
-        if (SkinShifter.CONFIG.changeChatName) {
+        if (SkinShifter.CONFIG.changeName) {
             PlayerProfile skin = SkinPlayerData.getSkin((Player) (Object) this);
             if (skin != null) {
                 Component skinName = decorateDisplayNameComponent(TComponent.literal(skin.name()));
