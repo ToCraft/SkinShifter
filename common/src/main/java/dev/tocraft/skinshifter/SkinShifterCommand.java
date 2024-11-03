@@ -59,7 +59,7 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                                     UUID playerUUID = UuidArgument.getUuid(context, "playerUUID");
                                     SkinShifter.setSkin(player, playerUUID);
                                     // run async in case of bad internet connection
-                                    CompletableFuture.runAsync(() -> CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.set", player.getDisplayName(), PlayerProfile.ofId(playerUUID).name()), true));
+                                    CompletableFuture.runAsync(() -> CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.set", player.getName(), PlayerProfile.ofId(playerUUID).name()), true));
                                     return 1;
                                 }))
                         .then(Commands.argument("playerName", MessageArgument.message())
@@ -87,7 +87,7 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                                             CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.invalid_player", playerName), true);
                                         } else {
                                             SkinShifter.setSkin(player, playerProfile.id());
-                                            CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.set", player.getDisplayName(), playerName), true);
+                                            CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.set", player.getName(), playerName), true);
                                         }
                                     });
                                     return 1;
@@ -112,20 +112,20 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                                 throw new SimpleCommandExceptionType(TComponent.translatable("craftedcore.command.invalid_perms")).create();
                             }
                             SkinShifter.setSkin(player, null);
-                            CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.reset", player.getDisplayName()), true);
+                            CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("skinshifter.command.reset", player.getName()), true);
                             return 1;
                         })).build();
 
         LiteralCommandNode<CommandSourceStack> changeChatName = Commands.literal("changeChatName").requires(source -> source.hasPermission(SkinShifter.CONFIG.baseCommandOPLevel))
                 .executes(context -> {
-                    boolean bool = SkinShifter.CONFIG.changeChatName;
+                    boolean bool = SkinShifter.CONFIG.changeName;
                     CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("craftedcore.config.get", "changeChatName", String.valueOf(bool)), true);
                     return 1;
                 })
                 .then(Commands.argument("value", BoolArgumentType.bool())
                         .executes(context -> {
                             boolean bool = BoolArgumentType.getBool(context, "value");
-                            SkinShifter.CONFIG.changeChatName = bool;
+                            SkinShifter.CONFIG.changeName = bool;
                             SkinShifter.CONFIG.save();
                             SkinShifter.CONFIG.sendToAllPlayers(context.getSource().getLevel());
                             CCommandSourceStack.sendSuccess(context.getSource(), TComponent.translatable("craftedcore.config.set", "changeChatName", String.valueOf(bool)), true);

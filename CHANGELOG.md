@@ -3,6 +3,7 @@ SkinShifter 1.3
 
 - port to 1.21.2
 - remove redundant config option
+- fix command output
 
 SkinShifter 1.2
 ================
