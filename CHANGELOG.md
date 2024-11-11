@@ -4,6 +4,7 @@ SkinShifter 1.3
 - port to 1.21.2
 - remove redundant config option
 - fix command output
+- add turkish by Feitan_Portor
 
 SkinShifter 1.2
 ================

@@ -1,0 +1,5 @@
+{
+  "skinshifter.command.set": "%s'ın skinini %s olarak ayarla.",
+  "skinshifter.command.reset": "%s'ın skinini sıfırla.",
+  "skinshifter.invalid_player": "Geçersiz oyuncu adı: %s"
+}
