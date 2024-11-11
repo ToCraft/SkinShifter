@@ -14,6 +14,7 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.MessageArgument;
 import net.minecraft.commands.arguments.UuidArgument;
 import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.NotNull;
 import tocraft.craftedcore.event.common.CommandEvents;
 import tocraft.craftedcore.patched.CCommandSourceStack;
 import tocraft.craftedcore.patched.TComponent;
@@ -35,7 +36,7 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
     //$$ }
     //#endif
 
-    private void onRegister(CommandDispatcher<CommandSourceStack> dispatcher) {
+    private void onRegister(@NotNull CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralCommandNode<CommandSourceStack> rootNode = Commands.literal(SkinShifter.MODID).requires(source -> source.hasPermission(SkinShifter.CONFIG.baseCommandOPLevel) || source.hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)).build();
         LiteralCommandNode<CommandSourceStack> set = Commands.literal("set")
                 .then(Commands.argument("player", EntityArgument.player())
