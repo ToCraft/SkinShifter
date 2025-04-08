@@ -3,6 +3,7 @@ SkinShifter 1.4
 
 - support 1.21.5
 - EoL for versions older then 1.21.2
+- fixed skin render issue
 
 SkinShifter 1.3
 ================

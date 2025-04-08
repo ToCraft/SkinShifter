@@ -30,7 +30,7 @@ public class SkinShifter {
     }
 
     /**
-     * @param player the player the skin should be set of
+     * @param player     the player the skin should be set of
      * @param skinPlayer the uuid of the owner of the new skin
      */
     public static void setSkin(@NotNull ServerPlayer player, UUID skinPlayer) {
@@ -52,7 +52,7 @@ public class SkinShifter {
                 //#if MC>=1215
                 return currentSkinTag.asString().map(UUID::fromString).orElse(player.getUUID());
                 //#else
-                return UUID.fromString(currentSkinTag.getAsString());
+                //$$ return UUID.fromString(currentSkinTag.getAsString());
                 //#endif
             } catch (IllegalArgumentException ignored) {
 
