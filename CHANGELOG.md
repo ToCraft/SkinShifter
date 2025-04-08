@@ -1,3 +1,8 @@
+SkinShifter 1.4
+================
+
+- support 1.21.5
+
 SkinShifter 1.3
 ================
 

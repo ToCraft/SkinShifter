@@ -1,3 +1,5 @@
+import java.util.*
+
 plugins {
     id("dev.tocraft.modmaster.fabric")
 }
@@ -13,8 +15,9 @@ tasks.withType<ProcessResources> {
     outputs.upToDateWhen { false }
 }
 
+val ccversion = (parent!!.ext["props"] as Properties)["craftedcore"] as String
 dependencies {
-    modApi("dev.tocraft:craftedcore-fabric:${parent!!.name}-${rootProject.properties["craftedcore_version"]}") {
+    modApi("dev.tocraft:craftedcore-fabric:${parent!!.name}-${ccversion}") {
         exclude("net.fabricmc.fabric-api")
         exclude("com.terraformersmc")
         exclude("me.shedaniel.cloth")

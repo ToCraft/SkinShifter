@@ -18,8 +18,9 @@ loom {
     }
 }
 
+val ccversion = (parent!!.ext["props"] as Properties)["craftedcore"] as String
 dependencies {
-    modApi("dev.tocraft:craftedcore-forge:${parent!!.name}-${rootProject.properties["craftedcore_version"]}") {
+    modApi("dev.tocraft:craftedcore-forge:${parent!!.name}-${ccversion}") {
         exclude("me.shedaniel.cloth")
     }
 }

@@ -49,7 +49,11 @@ public class SkinShifter {
         Tag currentSkinTag = PlayerDataRegistry.readTag(player, TAG_NAME);
         if (currentSkinTag != null) {
             try {
+                //#if MC>=1215
+                return currentSkinTag.asString().map(UUID::fromString).orElse(player.getUUID());
+                //#else
                 return UUID.fromString(currentSkinTag.getAsString());
+                //#endif
             } catch (IllegalArgumentException ignored) {
 
             }
