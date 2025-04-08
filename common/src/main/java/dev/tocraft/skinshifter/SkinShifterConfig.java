@@ -6,8 +6,6 @@ import tocraft.craftedcore.config.annotions.Synchronize;
 @SuppressWarnings("CanBeFinal")
 public class SkinShifterConfig implements Config {
     @Synchronize
-    public boolean changeCape = true;
-    @Synchronize
     public boolean changeName = true;
     public int baseCommandOPLevel = 2;
     public int selfCommandOPLevel = 0;
