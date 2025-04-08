@@ -19,9 +19,8 @@ tasks.withType<ProcessResources> {
     outputs.upToDateWhen { false }
 }
 
-val ccversion = (parent!!.ext["props"] as Properties)["craftedcore"] as String
 dependencies {
-    modApi("dev.tocraft:craftedcore-neoforge:${parent!!.name}-${ccversion}") {
+    modApi("dev.tocraft:craftedcore-neoforge:${parent!!.name}-${rootProject.properties["craftedcore_version"]}") {
         exclude("me.shedaniel.cloth")
     }
 }
