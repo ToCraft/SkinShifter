@@ -12,9 +12,12 @@
 This mod is intended to be used in modpacks or as library for other mods.
 You can change your skin by using the command `/skinshifter set @s xyz`, where `xyz` is the name or uuid of the player you want to morph into.
 
+Alternatively, you can use `/skinshifter url @s <slim> <url>`, where `<slim>` is `true` or `false`, depending on what kind of skin you want to use, and `<url>` is a url to a PNG file that shall be used as skin.
+
 If you're a coder, you can use the following methods:
 ~~~java
-SkinShifter.setSkin(serverPlayer, playerUuidForSkin); // Sets the current skin
+SkinShifter.setSkin(serverPlayer, playerUuidForSkin); // Sets the current skin by uuid
+SkinShifter.setSkinURI(serverPlayer, uriStr, slim); // sets the current skin uri. NOTE: a UUID skin is ALWAYS on top! Set the UUID skin to null first!
 SkinShifter.getCurrentSkin(serverPlayer); // returns the UUID of owner of the current skin. Might be the own UUID!
 ~~~
 

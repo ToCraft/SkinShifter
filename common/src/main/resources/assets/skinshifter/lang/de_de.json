@@ -1,5 +1,7 @@
 {
   "skinshifter.command.set": "Setzte den Skin von %s auf den von %s.",
   "skinshifter.command.reset": "Setzte den Skin von %s zurück.",
+  "skinshifter.command.invalid_uri": "Ungültige URI.",
+  "skinshifter.command.failed": "Konnte den Skin von %s nicht auf %s ändern.",
   "skinshifter.invalid_player": "Ungültiger Spieler-Name: %s"
 }

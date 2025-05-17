@@ -6,6 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -22,10 +23,12 @@ import java.util.concurrent.CompletableFuture;
 
 @ApiStatus.Internal
 public class SkinPlayerData {
-    public static final String TAG_NAME = "CurrentSkin";
+    public static final String SKIN_TAG_NAME = "CurrentSkin";
+    public static final String URI_TAG_NAME = "CurrentSkinURI";
 
     public static void initialize() {
-        PlayerDataRegistry.registerKey(TAG_NAME, true, true);
+        PlayerDataRegistry.registerKey(SKIN_TAG_NAME, true, true);
+        PlayerDataRegistry.registerKey(URI_TAG_NAME, true, true);
     }
 
     @Nullable
@@ -49,7 +52,7 @@ public class SkinPlayerData {
         if (uuid != player.getUUID()) {
             return getSkinProfile(uuid);
         } else {
-            return CompletableFuture.completedFuture(Optional.of(player.getGameProfile()));
+            return CompletableFuture.completedFuture(Optional.empty());
         }
     }
 
@@ -61,6 +64,10 @@ public class SkinPlayerData {
         return SkullBlockEntity.fetchGameProfile(name);
     }
 
+    /**
+     * @deprecated Use {@link SkinShifter#getSkinObj(Player)} instead
+     */
+    @Deprecated
     @Environment(EnvType.CLIENT)
     public static @NotNull CompletableFuture<Optional<PlayerSkin>> getPlayerSkin(Player player) {
         CompletableFuture<Optional<GameProfile>> profileFuture = getSkinProfile(player);
@@ -68,6 +75,17 @@ public class SkinPlayerData {
     }
 
     public static void setSkin(ServerPlayer player, @Nullable UUID orgSkinUUID) {
-        PlayerDataRegistry.writeTag(player, TAG_NAME, orgSkinUUID != null ? StringTag.valueOf(orgSkinUUID.toString()) : StringTag.valueOf(""));
+        PlayerDataRegistry.writeTag(player, SKIN_TAG_NAME, orgSkinUUID != null ? StringTag.valueOf(orgSkinUUID.toString()) : StringTag.valueOf(""));
+    }
+
+    public static void setSkinURI(ServerPlayer player, @Nullable String uri, boolean slim) {
+        if (uri != null) {
+            CompoundTag tag = new CompoundTag();
+            tag.putString("uri", uri);
+            tag.putBoolean("slim", slim);
+            PlayerDataRegistry.writeTag(player, URI_TAG_NAME, tag);
+        } else {
+            PlayerDataRegistry.writeTag(player, URI_TAG_NAME, new CompoundTag());
+        }
     }
 }

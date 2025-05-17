@@ -1,3 +1,8 @@
+SkinShifter 1.5
+================
+
+- add command to shift into URL skins
+
 SkinShifter 1.4
 ================
 
