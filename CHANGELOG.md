@@ -1,4 +1,4 @@
-SkinShifter 1.6
+SkinShifter 2.0
 ================
 
 - port to 1.21.7
