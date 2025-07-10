@@ -9,8 +9,8 @@ pluginManagement {
     }
 }
 
-plugins {
-    id("dev.tocraft.modmaster.settings") version "1.2"
-}
-
 rootProject.name = "SkinShifter"
+
+include("common")
+include("fabric")
+include("neoforge")

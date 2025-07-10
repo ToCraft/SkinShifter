@@ -1,3 +1,9 @@
+SkinShifter 1.6
+================
+
+- port to 1.21.7
+- remove multi-version structure
+
 SkinShifter 1.5
 ================
 

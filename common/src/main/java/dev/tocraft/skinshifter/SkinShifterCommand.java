@@ -8,6 +8,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import dev.tocraft.craftedcore.event.common.CommandEvents;
 import dev.tocraft.skinshifter.data.SkinPlayerData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
@@ -21,7 +22,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.NotNull;
-import tocraft.craftedcore.event.common.CommandEvents;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -138,8 +138,8 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
         LiteralCommandNode<CommandSourceStack> setURI = Commands.literal("url")
                 .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.argument("slim", BoolArgumentType.bool())
-                            .then(Commands.argument("uri", StringArgumentType.greedyString())
-                                    .executes(SkinShifterCommand::setByURI)))).build();
+                                .then(Commands.argument("uri", StringArgumentType.greedyString())
+                                        .executes(SkinShifterCommand::setByURI)))).build();
 
         rootNode.addChild(set);
         rootNode.addChild(reset);
@@ -175,22 +175,11 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
 
             SkinShifter.setSkin(player, null); // reset UUID skin
             SkinShifter.setSkinURI(player, uriStr, slim);
-            // run async in case of bad internet connection
-            SkinShifter.getSkinObj(player).thenAccept(skin -> {
-                if (skin.isPresent()) {
-                    Component uriText = Component.literal(uriStr).withStyle(Style.EMPTY
-                            .withColor(ChatFormatting.AQUA)
-                            .withUnderlined(true)
-                    //#if MC>=1215
-                       .withClickEvent(new ClickEvent.OpenUrl(uri)));
-                    //#else
-                    //$$         .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, uri.toString())));
-                    //#endif
-                    context.getSource().sendSuccess(() -> Component.translatable("skinshifter.command.set", player.getName(), uriText), true);
-                } else {
-                    context.getSource().sendFailure(Component.translatable("skinshifter.command.failed", player.getName(), uriStr));
-                }
-            });
+            Component uriText = Component.literal(uriStr).withStyle(Style.EMPTY
+                    .withColor(ChatFormatting.AQUA)
+                    .withUnderlined(true)
+                    .withClickEvent(new ClickEvent.OpenUrl(uri)));
+            context.getSource().sendSuccess(() -> Component.translatable("skinshifter.command.set", player.getName(), uriText), true);
             return 1;
         } catch (URISyntaxException e) {
             context.getSource().sendFailure(Component.translatable("skinshifter.command.invalid_uri"));

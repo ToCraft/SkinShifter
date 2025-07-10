@@ -1,7 +1,7 @@
 package dev.tocraft.skinshifter;
 
-import tocraft.craftedcore.config.Config;
-import tocraft.craftedcore.config.annotions.Synchronize;
+import dev.tocraft.craftedcore.config.Config;
+import dev.tocraft.craftedcore.config.annotions.Synchronize;
 
 @SuppressWarnings("CanBeFinal")
 public class SkinShifterConfig implements Config {

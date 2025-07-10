@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import tocraft.craftedcore.patched.TComponent;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -25,7 +24,7 @@ public abstract class PlayerMixin {
     private void onGetName(CallbackInfoReturnable<Component> cir) {
         if (SkinShifter.CONFIG.changeName) {
             CompletableFuture<Optional<GameProfile>> profileFuture = SkinPlayerData.getSkinProfile((Player) (Object) this);
-            profileFuture.getNow(Optional.empty()).ifPresent(profile -> cir.setReturnValue(decorateDisplayNameComponent(TComponent.literal((profile.getName())))));
+            profileFuture.getNow(Optional.empty()).ifPresent(profile -> cir.setReturnValue(decorateDisplayNameComponent(Component.literal((profile.getName())))));
         }
     }
 }
