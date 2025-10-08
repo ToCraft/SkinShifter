@@ -20,20 +20,19 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-@SuppressWarnings("unused")
 @Environment(EnvType.CLIENT)
 public class TextureCache {
     private static final Map<String, Optional<ResourceLocation>> LOADED_TEXTURES = new ConcurrentHashMap<>();
     private static String failedUrl = "";
 
-    public static Optional<ResourceLocation> getSkinTextureId(@NotNull URL textureURL) {
-        String urlString = textureURL.toString();
+    public static Optional<ResourceLocation> loadSkinTexture(@NotNull URL textureURL) {
+        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(
+                SkinShifter.MODID,
+                "textures/player/skin_" + textureURL.hashCode() + ".png"
+        );
 
-        return LOADED_TEXTURES.computeIfAbsent(urlString, url -> {
-            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(
-                    SkinShifter.MODID,
-                    "textures/player/skin_" + url.hashCode() + ".png"
-            );
+        return LOADED_TEXTURES.computeIfAbsent(location.toString(), url -> {
+            ResourceLocation id = location.withPath(string -> "textures/" + string + ".png");
 
             try (InputStream is = textureURL.openStream()) {
                 NativeImage image = NativeImage.read(new ByteArrayInputStream(is.readAllBytes()));
@@ -41,7 +40,7 @@ public class TextureCache {
                 DynamicTexture dynamicTexture = new DynamicTexture(id::toString, image);
 
                 Minecraft.getInstance().getTextureManager().register(id, dynamicTexture);
-                return Optional.of(id); // success
+                return Optional.of(location); // success
             } catch (IOException e) {
                 if (!Objects.equals(failedUrl, url)) { // only log once
                     LogUtils.getLogger().error("Failed to load texture from URL: {}", url, e);

@@ -1,3 +1,9 @@
+SkinShifter 2.1
+================
+
+- port to 1.21.9, 1.21.10
+- add support for permissions
+
 SkinShifter 2.0
 ================
 

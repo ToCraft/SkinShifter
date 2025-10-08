@@ -4,6 +4,7 @@ import dev.tocraft.craftedcore.config.ConfigLoader;
 import dev.tocraft.craftedcore.event.common.CommandEvents;
 import dev.tocraft.craftedcore.platform.VersionChecker;
 import dev.tocraft.craftedcore.registration.PlayerDataRegistry;
+import dev.tocraft.skinshifter.command.SkinShifterCommand;
 import dev.tocraft.skinshifter.data.SkinPlayerData;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

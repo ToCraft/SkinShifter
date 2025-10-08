@@ -1,4 +1,4 @@
-package dev.tocraft.skinshifter;
+package dev.tocraft.skinshifter.command;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
@@ -9,6 +9,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.tocraft.craftedcore.event.common.CommandEvents;
+import dev.tocraft.skinshifter.SkinShifter;
 import dev.tocraft.skinshifter.data.SkinPlayerData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
@@ -27,7 +28,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public class SkinShifterCommand implements CommandEvents.CommandRegistration {
     @Override
@@ -60,7 +60,8 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                                     SkinShifter.setSkinURI(player, null, false); // reset Skin URI
                                     SkinShifter.setSkin(player, playerUUID);
                                     // run async in case of bad internet connection
-                                    SkinPlayerData.getSkinProfile(playerUUID).thenAccept(profile -> context.getSource().sendSuccess(() -> Component.translatable("skinshifter.command.set", player.getName(), profile.orElse(player.getGameProfile()).getName()), true));
+                                    Optional<GameProfile> profile = SkinPlayerData.getSkinProfile(playerUUID);
+                                    context.getSource().sendSuccess(() -> Component.translatable("skinshifter.command.set", player.getName(), profile.orElse(player.getGameProfile()).name()), true);
                                     return 1;
                                 }))
                         .then(Commands.argument("playerName", MessageArgument.message())
@@ -82,15 +83,13 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                                     }
                                     String playerName = MessageArgument.getMessage(context, "playerName").getString();
                                     // run async in case of bad internet connection
-                                    @NotNull CompletableFuture<Optional<GameProfile>> profileFuture = SkinPlayerData.getSkinProfile(playerName);
-                                    profileFuture.thenAccept(profile -> {
-                                        if (profile.isEmpty()) {
-                                            context.getSource().sendSuccess(() -> Component.translatable("skinshifter.invalid_player", playerName), true);
-                                        } else {
-                                            SkinShifter.setSkin(player, profile.get().getId());
-                                            context.getSource().sendSuccess(() -> Component.translatable("skinshifter.command.set", player.getName(), playerName), true);
-                                        }
-                                    });
+                                    @NotNull Optional<GameProfile> profile = SkinPlayerData.getSkinProfile(playerName);
+                                    if (profile.isEmpty()) {
+                                        context.getSource().sendSuccess(() -> Component.translatable("skinshifter.invalid_player", playerName), true);
+                                    } else {
+                                        SkinShifter.setSkin(player, profile.get().id());
+                                        context.getSource().sendSuccess(() -> Component.translatable("skinshifter.command.set", player.getName(), playerName), true);
+                                    }
                                     return 1;
                                 }))).build();
 
