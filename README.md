@@ -39,6 +39,10 @@ class Test {
 }
 ~~~
 
+## Permissions
+
+As of SkinShifter 3.0, you can use SkinShifter with Permission Systems, such as LuckPerms. For a detailed guide, take a look at [Permissions](PERMISSIONS).
+
 ### License
 
 SkinShifter is licensed under Apache 2.0. 

@@ -11,6 +11,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.tocraft.craftedcore.event.common.CommandEvents;
 import dev.tocraft.skinshifter.SkinShifter;
 import dev.tocraft.skinshifter.data.SkinPlayerData;
+import dev.tocraft.skinshifter.permission.ShifterPermissions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -36,7 +37,7 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
     }
 
     private void onRegister(@NotNull CommandDispatcher<CommandSourceStack> dispatcher) {
-        LiteralCommandNode<CommandSourceStack> rootNode = Commands.literal(SkinShifter.MODID).requires(source -> source.hasPermission(SkinShifter.CONFIG.baseCommandOPLevel) || source.hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)).build();
+        LiteralCommandNode<CommandSourceStack> rootNode = Commands.literal(SkinShifter.MODID).requires(source -> source.hasPermission(0)).build();
         LiteralCommandNode<CommandSourceStack> set = Commands.literal("set")
                 .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.argument("playerUUID", UuidArgument.uuid())
@@ -49,13 +50,23 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                                     } catch (CommandSyntaxException e) {
                                         sender = null;
                                     }
-                                    if (sender != null && sender.getUUID() == player.getUUID()) {
-                                        if (!context.getSource().hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)) {
+
+                                    // check perms
+                                    if (SkinShifter.CONFIG.usePermissions && sender != null) {
+                                        if (!ShifterPermissions.canUseCommandOnTarget(sender, player, "set")) {
                                             throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
                                         }
-                                    } else if (!context.getSource().hasPermission(SkinShifter.CONFIG.baseCommandOPLevel)) {
-                                        throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
                                     }
+                                    else {
+                                        if (sender != null && sender.getUUID() == player.getUUID()) {
+                                            if (!context.getSource().hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)) {
+                                                throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
+                                            }
+                                        } else if (!context.getSource().hasPermission(SkinShifter.CONFIG.baseCommandOPLevel)) {
+                                            throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
+                                        }
+                                    }
+
                                     UUID playerUUID = UuidArgument.getUuid(context, "playerUUID");
                                     SkinShifter.setSkinURI(player, null, false); // reset Skin URI
                                     SkinShifter.setSkin(player, playerUUID);
@@ -74,13 +85,23 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                                     } catch (CommandSyntaxException e) {
                                         sender = null;
                                     }
-                                    if (sender != null && sender.getUUID() == player.getUUID()) {
-                                        if (!context.getSource().hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)) {
+
+                                    // check perms
+                                    if (SkinShifter.CONFIG.usePermissions && sender != null) {
+                                        if (!ShifterPermissions.canUseCommandOnTarget(sender, player, "set")) {
                                             throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
                                         }
-                                    } else if (!context.getSource().hasPermission(SkinShifter.CONFIG.baseCommandOPLevel)) {
-                                        throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
                                     }
+                                    else {
+                                        if (sender != null && sender.getUUID() == player.getUUID()) {
+                                            if (!context.getSource().hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)) {
+                                                throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
+                                            }
+                                        } else if (!context.getSource().hasPermission(SkinShifter.CONFIG.baseCommandOPLevel)) {
+                                            throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
+                                        }
+                                    }
+
                                     String playerName = MessageArgument.getMessage(context, "playerName").getString();
                                     // run async in case of bad internet connection
                                     @NotNull Optional<GameProfile> profile = SkinPlayerData.getSkinProfile(playerName);
@@ -104,13 +125,23 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                             } catch (CommandSyntaxException e) {
                                 sender = null;
                             }
-                            if (sender != null && sender.getUUID() == player.getUUID()) {
-                                if (!context.getSource().hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)) {
+
+                            // check perms
+                            if (SkinShifter.CONFIG.usePermissions && sender != null) {
+                                if (!ShifterPermissions.canUseCommandOnTarget(sender, player, "reset")) {
                                     throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
                                 }
-                            } else if (!context.getSource().hasPermission(SkinShifter.CONFIG.baseCommandOPLevel)) {
-                                throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
                             }
+                            else {
+                                if (sender != null && sender.getUUID() == player.getUUID()) {
+                                    if (!context.getSource().hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)) {
+                                        throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
+                                    }
+                                } else if (!context.getSource().hasPermission(SkinShifter.CONFIG.baseCommandOPLevel)) {
+                                    throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
+                                }
+                            }
+
                             // reset skin & skin uri
                             SkinShifter.setSkin(player, null);
                             SkinShifter.setSkinURI(player, null, false);
@@ -118,7 +149,17 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                             return 1;
                         })).build();
 
-        LiteralCommandNode<CommandSourceStack> changeChatName = Commands.literal("changeChatName").requires(source -> source.hasPermission(SkinShifter.CONFIG.baseCommandOPLevel))
+        LiteralCommandNode<CommandSourceStack> changeChatName = Commands.literal("changeChatName").requires(source -> {
+            if (source.getPlayer() != null) {
+                if (SkinShifter.CONFIG.usePermissions && source.getPlayer() != null) {
+                    return ShifterPermissions.canUseCommand(source.getPlayer(), "reset");
+                }
+                else {
+                    return source.hasPermission(SkinShifter.CONFIG.baseCommandOPLevel);
+                }
+            }
+            return true;
+                })
                 .executes(context -> {
                     boolean bool = SkinShifter.CONFIG.changeName;
                     context.getSource().sendSuccess(() -> Component.translatable("craftedcore.config.get", "changeChatName", String.valueOf(bool)), true);
@@ -140,6 +181,7 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
                                 .then(Commands.argument("uri", StringArgumentType.greedyString())
                                         .executes(SkinShifterCommand::setByURI)))).build();
 
+        rootNode.addChild(ListPermissionsCommand.createNode());
         rootNode.addChild(set);
         rootNode.addChild(reset);
         rootNode.addChild(changeChatName);
@@ -158,12 +200,20 @@ public class SkinShifterCommand implements CommandEvents.CommandRegistration {
             sender = null;
         }
 
-        if (sender != null && sender.getUUID() == player.getUUID()) {
-            if (!context.getSource().hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)) {
+        // check perms
+        if (SkinShifter.CONFIG.usePermissions && sender != null) {
+            if (!ShifterPermissions.canUseCommandOnTarget(sender, player, "uri")) {
                 throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
             }
-        } else if (!context.getSource().hasPermission(SkinShifter.CONFIG.baseCommandOPLevel)) {
-            throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
+        }
+        else {
+            if (sender != null && sender.getUUID() == player.getUUID()) {
+                if (!context.getSource().hasPermission(SkinShifter.CONFIG.selfCommandOPLevel)) {
+                    throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
+                }
+            } else if (!context.getSource().hasPermission(SkinShifter.CONFIG.baseCommandOPLevel)) {
+                throw new SimpleCommandExceptionType(Component.translatable("craftedcore.command.invalid_perms")).create();
+            }
         }
 
         String uriStr = StringArgumentType.getString(context, "uri");
