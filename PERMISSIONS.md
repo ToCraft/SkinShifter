@@ -37,13 +37,15 @@ separately!**
 4. Configure permissions using your permission plugin (LuckPerms, etc.)
 
 ### For NeoForge Servers
+
 Permissions work automatically once enabled.
 
 ### For Fabric Servers
 
 **REQUIRED**: Install [Fabric Permissions API](https://modrinth.com/mod/fabric-permissions-api) mod first!
 
-After installing the API mod and enabling permissions, permissions will be automatically discovered by LuckPerms when first used. No manual registration needed!
+After installing the API mod and enabling permissions, permissions will be automatically discovered by LuckPerms when
+first used. No manual registration needed!
 
 ### How Permissions Work
 
@@ -110,6 +112,7 @@ All `/skinshifter` commands support granular permission control with `.self` and
 ## Commands
 
 ### `/skinshifter list-permissions`
+
 Lists all available permissions with copy-paste LuckPerms commands.
 
 **Note**: Only server operators (OP level 2+) can run this command.
@@ -162,9 +165,9 @@ Lists all available permissions with copy-paste LuckPerms commands.
 
 ### Wildcard Permissions
 
-| Permission                   | Description                       |
-|------------------------------|-----------------------------------|
-| `skinshifter.*`                | All skinshifter permissions         |
+| Permission                     | Description                       |
+|--------------------------------|-----------------------------------|
+| `skinshifter.*`                | All skinshifter permissions       |
 | `skinshifter.command.*`        | All command permissions (basic)   |
 | `skinshifter.command.*.self`   | All self-only command permissions |
 | `skinshifter.command.*.others` | All others command permissions    |

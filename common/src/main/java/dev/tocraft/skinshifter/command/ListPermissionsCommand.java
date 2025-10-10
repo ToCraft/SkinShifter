@@ -3,9 +3,9 @@ package dev.tocraft.skinshifter.command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.ClickEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**

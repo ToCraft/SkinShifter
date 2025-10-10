@@ -3,6 +3,7 @@ package dev.tocraft.skinshifter.data;
 import com.mojang.authlib.GameProfile;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
+import dev.tocraft.craftedcore.platform.PlatformData;
 import dev.tocraft.craftedcore.registration.PlayerDataRegistry;
 import dev.tocraft.skinshifter.SkinShifter;
 import net.fabricmc.api.EnvType;
@@ -12,6 +13,7 @@ import net.minecraft.core.ClientAsset;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.ProfileResolver;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerModelType;
 import net.minecraft.world.entity.player.PlayerSkin;
@@ -37,25 +39,40 @@ public class SkinPlayerData {
     }
 
     public static @NotNull Optional<GameProfile> getSkinProfile(Player player) {
+        // get ProfileResolver depending on Env
+        final ProfileResolver profileResolver = switch (PlatformData.getEnv()) {
+            case CLIENT -> Minecraft.getInstance().services().profileResolver();
+            case SERVER -> ((ServerPlayer) player).level().getServer().services().profileResolver();
+        };
+
         UUID uuid = SkinShifter.getCurrentSkin(player);
         if (uuid != player.getUUID()) {
-            return getSkinProfile(uuid);
+            return getSkinProfile(profileResolver, uuid);
         } else {
             return Optional.empty();
         }
     }
 
-    public static @NotNull Optional<GameProfile> getSkinProfile(UUID uuid) {
-        return Minecraft.getInstance().services().profileResolver().fetchById(uuid);
+    public static @NotNull Optional<GameProfile> getSkinProfile(ProfileResolver profileResolver, Player player) {
+        UUID uuid = SkinShifter.getCurrentSkin(player);
+        if (uuid != player.getUUID()) {
+            return getSkinProfile(profileResolver, uuid);
+        } else {
+            return Optional.empty();
+        }
     }
 
-    public static @NotNull Optional<GameProfile> getSkinProfile(String name) {
-        return Minecraft.getInstance().services().profileResolver().fetchByName(name);
+    public static @NotNull Optional<GameProfile> getSkinProfile(ProfileResolver profileResolver, UUID uuid) {
+        return profileResolver.fetchById(uuid);
+    }
+
+    public static @NotNull Optional<GameProfile> getSkinProfile(ProfileResolver profileResolver, String name) {
+        return profileResolver.fetchByName(name);
     }
 
     @Environment(EnvType.CLIENT)
-    public static @NotNull CompletableFuture<Optional<PlayerSkin>> getPlayerSkin(Player player) {
-        CompletableFuture<Optional<GameProfile>> profileFuture = CompletableFuture.completedFuture(getSkinProfile(player));
+    public static @NotNull CompletableFuture<Optional<PlayerSkin>> getPlayerSkin(ProfileResolver profileResolver, Player player) {
+        CompletableFuture<Optional<GameProfile>> profileFuture = CompletableFuture.completedFuture(getSkinProfile(profileResolver, player));
         return profileFuture.thenApply(profile -> {
             Optional<PlayerSkin> skin = profile.map(gameProfile -> Minecraft.getInstance().getSkinManager().createLookup(gameProfile, true).get());
             if (skin.isEmpty()) {

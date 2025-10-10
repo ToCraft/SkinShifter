@@ -3,6 +3,7 @@ package dev.tocraft.skinshifter.mixin.client;
 import dev.tocraft.skinshifter.data.SkinPlayerData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerSkin;
@@ -20,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 public class AbstractClientPlayerMixin {
     @Inject(method = "getSkin", at = @At("RETURN"), cancellable = true)
     public void setToNewSkin(@NotNull CallbackInfoReturnable<PlayerSkin> cir) {
-        @NotNull CompletableFuture<Optional<PlayerSkin>> skinFuture = SkinPlayerData.getPlayerSkin((Player) (Object) this);
+        @NotNull CompletableFuture<Optional<PlayerSkin>> skinFuture = SkinPlayerData.getPlayerSkin(Minecraft.getInstance().services().profileResolver(), (Player) (Object) this);
         Optional<PlayerSkin> playerSkin = skinFuture.getNow(Optional.empty());
         playerSkin.ifPresent(cir::setReturnValue);
     }
