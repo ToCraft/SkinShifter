@@ -24,40 +24,25 @@ public class SkinShifterNeoForge {
 
     public static void registerNodesEvent(PermissionGatherEvent.@NotNull Nodes event) {
         List<PermissionNode<Boolean>> nodes = new ArrayList<>();
-        
-        // Core permissions
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
 
         // Command permissions (basic)
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
+        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "command"));
+        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "set"));
+        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "uri"));
+        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "reset"));
+        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "changeChatName"));
 
         // Command permissions (.self variants)
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
+        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "set.self"));
+        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "uri.self"));
+        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "reset.self"));
+        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "changeChatName.self"));
 
         // Command permissions (.others variants)
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
-        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "morph"));
+        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "set.others"));
+        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "uri.others"));
+        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "reset.others"));
+        nodes.add(PermissionCheckerImpl.createNode("skinshifter", "changeChatName.others"));
 
         // Entity type permissions for all registered entities
         BuiltInRegistries.ENTITY_TYPE.forEach(entityType -> {

@@ -1,4 +1,4 @@
-SkinShifter 3.0
+SkinShifter 3.0.0
 ================
 
 - port to 1.21.9, 1.21.10
