@@ -15,7 +15,7 @@ public class ListPermissionsCommand {
 
     public static LiteralCommandNode<CommandSourceStack> createNode() {
         return Commands.literal("list-permissions")
-                .requires(source -> source.hasPermission(2))
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .executes(context -> {
                     listAllPermissions(context.getSource());
                     return 1;

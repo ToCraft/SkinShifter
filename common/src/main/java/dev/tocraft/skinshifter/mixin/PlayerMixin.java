@@ -17,7 +17,7 @@ import java.util.Optional;
 @Mixin(Player.class)
 public abstract class PlayerMixin {
     @Shadow
-    protected abstract MutableComponent decorateDisplayNameComponent(MutableComponent displayName);
+    protected abstract MutableComponent decorateDisplayNameComponent(MutableComponent nameComponent);
 
     @Inject(method = "getDisplayName", at = @At("RETURN"), cancellable = true)
     private void onGetName(CallbackInfoReturnable<Component> cir) {

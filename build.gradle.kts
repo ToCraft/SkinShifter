@@ -1,12 +1,16 @@
 plugins {
-    id("dev.tocraft.modmaster.root") version ("single-1.9")
+    id("dev.tocraft.modmaster.root") version ("2.3")
 }
 
-ext {
-    val modMeta = mutableMapOf<String, Any>()
-    modMeta["minecraft_version"] = project.properties["minecraft"] as String
-    modMeta["version"] = version
-    modMeta["craftedcore_version"] = project.properties["craftedcore_version"] as String
-    set("mod_meta", modMeta)
+subprojects {
+    repositories {
+        mavenLocal()
+        maven("https://maven.fabricmc.net/") // fabric api
+        maven("https://maven.terraformersmc.com/releases/") // mod menu mod
+        maven("https://maven.shedaniel.me/") // cloth config
+        maven {
+            name = "Minecraft Libraries"
+            url = uri("https://libraries.minecraft.net")
+        }
+    }
 }
-

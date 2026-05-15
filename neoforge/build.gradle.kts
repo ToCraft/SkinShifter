@@ -2,23 +2,20 @@ plugins {
     id("dev.tocraft.modmaster.neoforge")
 }
 
-tasks.withType<ProcessResources> {
-    @Suppress("UNCHECKED_CAST") val modMeta = parent!!.ext["mod_meta"]!! as Map<String, Any>
-
-    filesMatching("META-INF/mods.toml") {
-        expand(modMeta)
+dependencies {
+    implementation("dev.tocraft:craftedcore-neoforge:${property("craftedcore_version")}") {
+        exclude(group = "me.shedaniel.cloth")
     }
-
-    filesMatching("META-INF/neoforge.mods.toml") {
-        expand(modMeta)
-    }
-
-
-    outputs.upToDateWhen { false }
 }
 
-dependencies {
-    modApi("dev.tocraft:craftedcore-neoforge:${rootProject.properties["craftedcore_version"]}") {
-        exclude("me.shedaniel.cloth")
+tasks.processResources {
+    val mcVersion = project.property("minecraft")
+    val craftedcoreVersion = project.property("craftedcore_version")
+    filesMatching(listOf("META-INF/neoforge.mods.toml", "META-INF/mods.toml")) {
+        expand(mapOf(
+            "version" to project.version,
+            "minecraft_version" to mcVersion,
+            "craftedcore_version" to craftedcoreVersion
+        ))
     }
 }

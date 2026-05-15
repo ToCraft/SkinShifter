@@ -2,20 +2,24 @@ plugins {
     id("dev.tocraft.modmaster.fabric")
 }
 
-tasks.withType<ProcessResources> {
-    @Suppress("UNCHECKED_CAST") val modMeta = parent!!.ext["mod_meta"]!! as Map<String, Any>
+dependencies {
+    implementation("net.fabricmc.fabric-api:fabric-api:${property("fabric")}")
 
-    filesMatching("fabric.mod.json") {
-        expand(modMeta)
+    implementation("dev.tocraft:craftedcore-fabric:${property("craftedcore_version")}") {
+        exclude("net.fabricmc.fabric-api")
+        exclude(group = "me.shedaniel.cloth")
+        exclude(group = "com.terraformersmc")
     }
-
-    outputs.upToDateWhen { false }
 }
 
-dependencies {
-    modApi("dev.tocraft:craftedcore-fabric:${rootProject.properties["craftedcore_version"]}") {
-        exclude("net.fabricmc.fabric-api")
-        exclude("com.terraformersmc")
-        exclude("me.shedaniel.cloth")
+tasks.processResources {
+    val mcVersion = project.property("minecraft")
+    val craftedcoreVersion = project.property("craftedcore_version")
+    filesMatching("fabric.mod.json") {
+        expand(mapOf(
+            "version" to project.version,
+            "minecraft_version" to mcVersion,
+            "craftedcore_version" to craftedcoreVersion
+        ))
     }
 }

@@ -11,9 +11,10 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.ClientAsset;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ProfileResolver;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.PlayerModelType;
 import net.minecraft.world.entity.player.PlayerSkin;
@@ -73,8 +74,7 @@ public class SkinPlayerData {
     @Environment(EnvType.CLIENT)
     public static @NotNull CompletableFuture<Optional<PlayerSkin>> getPlayerSkin(ProfileResolver profileResolver, Player player) {
         CompletableFuture<Optional<GameProfile>> profileFuture = CompletableFuture.completedFuture(getSkinProfile(profileResolver, player));
-        return profileFuture.thenApply(profile -> {
-            Optional<PlayerSkin> skin = profile.map(gameProfile -> Minecraft.getInstance().getSkinManager().createLookup(gameProfile, true).get());
+        return profileFuture.thenCompose(profile -> profile.map(gameProfile -> Minecraft.getInstance().getSkinManager().get(gameProfile)).orElse(new CompletableFuture<>())).thenApply(skin -> {
             if (skin.isEmpty()) {
                 // test if there is a url
                 Optional<CompoundTag> currentUriTag = Optional.ofNullable(PlayerDataRegistry.readTag(player, URI_TAG_NAME, CompoundTag.class));
@@ -85,7 +85,7 @@ public class SkinPlayerData {
                     if (!uri.isEmpty()) {
                         try {
                             URL url = URI.create(uri).toURL();
-                            Optional<ResourceLocation> id = TextureCache.loadSkinTexture(url);
+                            Optional<Identifier> id = TextureCache.loadSkinTexture(url);
 
                             if (id.isPresent()) {
                                 return Optional.of(new PlayerSkin(new ClientAsset.ResourceTexture(id.get()), null, null, slim ? PlayerModelType.SLIM : PlayerModelType.WIDE, true));
@@ -95,6 +95,7 @@ public class SkinPlayerData {
                         }
                     }
                 }
+                return Optional.empty();
             }
             return skin;
         });

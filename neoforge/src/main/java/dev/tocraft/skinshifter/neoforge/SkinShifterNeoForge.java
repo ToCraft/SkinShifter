@@ -3,7 +3,7 @@ package dev.tocraft.skinshifter.neoforge;
 import dev.tocraft.craftedcore.permission.neoforge.PermissionCheckerImpl;
 import dev.tocraft.skinshifter.SkinShifter;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
@@ -46,7 +46,7 @@ public class SkinShifterNeoForge {
 
         // Entity type permissions for all registered entities
         BuiltInRegistries.ENTITY_TYPE.forEach(entityType -> {
-            ResourceLocation key = EntityType.getKey(entityType);
+            Identifier key = EntityType.getKey(entityType);
             nodes.add(PermissionCheckerImpl.createNode("skinshifter", "type." + key));
         });
 

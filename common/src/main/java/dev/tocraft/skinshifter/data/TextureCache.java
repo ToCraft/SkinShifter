@@ -8,7 +8,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -22,17 +22,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Environment(EnvType.CLIENT)
 public class TextureCache {
-    private static final Map<String, Optional<ResourceLocation>> LOADED_TEXTURES = new ConcurrentHashMap<>();
+    private static final Map<String, Optional<Identifier>> LOADED_TEXTURES = new ConcurrentHashMap<>();
     private static String failedUrl = "";
 
-    public static Optional<ResourceLocation> loadSkinTexture(@NotNull URL textureURL) {
-        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(
+    public static Optional<Identifier> loadSkinTexture(@NotNull URL textureURL) {
+        Identifier location = Identifier.fromNamespaceAndPath(
                 SkinShifter.MODID,
                 "textures/player/skin_" + textureURL.hashCode() + ".png"
         );
 
         return LOADED_TEXTURES.computeIfAbsent(location.toString(), url -> {
-            ResourceLocation id = location.withPath(string -> "textures/" + string + ".png");
+            Identifier id = location.withPath(string -> "textures/" + string + ".png");
 
             try (InputStream is = textureURL.openStream()) {
                 NativeImage image = NativeImage.read(new ByteArrayInputStream(is.readAllBytes()));
@@ -46,7 +46,7 @@ public class TextureCache {
                     LogUtils.getLogger().error("Failed to load texture from URL: {}", url, e);
                     // show in chat
                     if (Minecraft.getInstance().player != null) {
-                        Minecraft.getInstance().player.displayClientMessage(Component.translatable("skinshifter.command.invalid_uri").withColor(0xFF0000), false);
+                        Minecraft.getInstance().player.sendSystemMessage(Component.translatable("skinshifter.command.invalid_uri").withColor(0xFF0000));
                     }
 
                     failedUrl = url;
