@@ -1,3 +1,8 @@
+SkinShifter 3.2.0
+================
+
+- port to 26.2
+
 SkinShifter 3.1.0
 ================
 
