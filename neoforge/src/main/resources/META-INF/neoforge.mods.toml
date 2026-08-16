@@ -15,7 +15,7 @@ authors = "To_Craft"
 description = '''
 Change your Skin!
 '''
-logoFile = "icon.png"
+iconFile = "icon.png"
 
 [[dependencies.skinshifter]]
 modId = "minecraft"
